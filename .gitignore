@@ -3,3 +3,9 @@
 ################################################################################
 
 /.vs
+/Interview/.vs/Interview/v15
+/Interview/Interview/bin/Debug
+/Interview/Interview/obj
+/Interview/Interview.Test/bin/Debug
+/Interview/Interview.Test/obj/Debug
+/Interview/packages
