@@ -23,12 +23,12 @@ namespace Interview
 
         public void Delete(object id)
         {
-            entities.RemoveAll(d=>d.Id.ToString()==id.ToString());
+            entities.RemoveAll(e=>e.Id.Equals(id));
         }
 
         public T Get(object id)
         {
-            return entities.Find(g=>g.Id.ToString() ==id.ToString());
+            return entities.Find(e=>e.Id.Equals(id));
         }
 
         public void Save(T item)

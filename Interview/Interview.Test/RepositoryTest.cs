@@ -10,11 +10,12 @@ namespace Interview.Test
     {
         private IRepository<IStoreable<object>, object> repository;
         private List<IStoreable<object>> storeables;
+        public readonly int ID = 1;
 
         [TestInitialize]
         public void Setup()
         {
-            storeables = new List<IStoreable<object>>() { new Storeable<object> (1) };
+            storeables = new List<IStoreable<object>>() { new Storeable<object> (ID) };
             repository = new Repository<IStoreable<object>>(storeables);
 
         }
@@ -40,14 +41,13 @@ namespace Interview.Test
         {
 
             //Arrange
-            int intId = 1;
 
             //Act
-            var result = repository.Get(intId);
+            var result = repository.Get(ID);
 
             //Assert 
             Assert.IsNotNull(result);
-            Assert.AreEqual(result.Id, intId);
+            Assert.AreEqual(result.Id, ID);
         }
 
         [TestMethod]
@@ -55,7 +55,7 @@ namespace Interview.Test
         public void GivenRepository_WhenReqeustToAddItem_ShouldSaveRecordInRepository()
         {
             //Arrange 
-            int intId = 1;
+            int intId = 2;
             var newRecordInTypeId= new Storeable<object>(intId);
    
             //Act 
@@ -73,11 +73,10 @@ namespace Interview.Test
         public void GivenRepository_WhenRequestToRemoveItem_ShouldDeleteRecordFromRepository()
         {
             //Arrange 
-            int intId = 1;
 
             //Act
-            repository.Delete(intId);
-            IStoreable<Object> result = repository.Get(intId);
+            repository.Delete(ID);
+            IStoreable<Object> result = repository.Get(ID);
 
             //Assert
             Assert.IsNull(result);
