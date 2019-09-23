@@ -8,14 +8,14 @@ namespace Interview.Test
     [TestClass]
     public class RepositoryTest
     {
-        private IRepository<IStoreable<Object>,Object> repository;
-        private IStoreable<Object> storeable;
+        private IRepository<IStoreable<object>, object> repository;
+        private List<IStoreable<object>> storeables;
 
         [TestInitialize]
         public void Setup()
         {
-            storeable = new Storable<Object>() { Id = 1 };
-            repository = new Repository<IStoreable<Object>,Object>(storeable);
+            storeables = new List<IStoreable<object>>() { new Storeable<object> (1) };
+            repository = new Repository<IStoreable<object>>(storeables);
 
         }
 
@@ -24,13 +24,13 @@ namespace Interview.Test
         public void GivenRepository_WhenRequestedForAll_ShouldReturnRepositoryList()
         {
             //Arrange 
-            IEnumerable<IStoreable<Object>> result;
+            IEnumerable<IStoreable<object>> result;
 
             //Act
             result = repository.GetAll();
 
             // Assert
-            Assert.IsInstanceOfType(result, typeof(IEnumerable<IStoreable<Object>>));
+            Assert.IsInstanceOfType(result, typeof(IList<IStoreable<object>>));
             Assert.IsTrue(result.Count() > 0);
         }
 
@@ -56,7 +56,7 @@ namespace Interview.Test
         {
             //Arrange 
             int intId = 1;
-            var newRecordInTypeId= new Storable<Object> { Id = intId };
+            var newRecordInTypeId= new Storeable<object>(intId);
    
             //Act 
             repository.Save(newRecordInTypeId);
