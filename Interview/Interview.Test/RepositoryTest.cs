@@ -70,7 +70,7 @@ namespace Interview.Test
 
         [TestMethod]
         [TestCategory("Success")]
-        public void GivenRepository_WhenRequestToRemoveItem_ShouldDeleteRecordFromRepository()
+        public void GivenRepository_WhenRequestToRemoveExistingItem_ShouldDeleteRecordFromRepository()
         {
             //Arrange 
 
@@ -81,5 +81,93 @@ namespace Interview.Test
             //Assert
             Assert.IsNull(result);
         }
+
+        [TestMethod]
+        [TestCategory("Exception")]
+        [ExpectedException(typeof(ArgumentException))]
+        public void GivenRepository_WhenRequestToRemoveNonExistingItem_ShouldRaiseAnException()
+        {
+            //Arrange 
+            Guid newGuid = Guid.NewGuid();
+
+            //Act
+            repository.Delete(newGuid);
+
+            // Assert - Expects exception
+
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        [TestCategory("Exception")]
+        public void GivenRepository_WhenRequesForRecordByNonExisitngId_ShouldRaiseArgumentOutOfRangeException()
+        {
+            // Arrange
+            int? newId = null;
+
+            // Act 
+            var result = repository.Get(newId);
+
+            // Assert - Expects exception
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        [TestCategory("Exception")]
+        public void GivenRepository_WhenRequestToAddExistingItem_ShouldRaiseArgumentOutOfRangeException()
+        {
+            // Arrange
+            int? newId = null;
+            var newRecordInTypeId = new Storeable<object>(newId);
+
+            // Act 
+            repository.Save(newRecordInTypeId);
+
+            // Assert - Expects exception
+        }
+
+        [TestMethod]
+        [TestCategory("Exception")]
+        [ExpectedException(typeof(NullReferenceException))]
+        public void GivenRepository_WhenRequestToRemoveNonExistingItem_ShouldRaiseNullReferenceException()
+        {
+            //Arrange 
+            Guid newGuid = Guid.NewGuid();
+
+            //Act
+            repository.Delete(newGuid);
+
+            // Assert - Expects exception
+
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(NullReferenceException))]
+        [TestCategory("Exception")]
+        public void GivenRepository_WhenRequestToAddNullItem_ShouldRaiseArgumentOutODRangeException()
+        {
+            // Arrange
+            int? newId = null;
+            var newRecordInTypeId = new Storeable<object>(newId);
+
+            // Act 
+            repository.Save(newRecordInTypeId);
+
+            // Assert - Expects exception
+        }
+        [TestMethod]
+        [ExpectedException(typeof(NullReferenceException))]
+        [TestCategory("Exception")]
+        public void GivenRepository_WhenRequesForRecordByNullId_ShouldRaiseNullRefernceException()
+        {
+            // Arrange
+            int? newId = null;
+
+            // Act 
+            var result =  repository.Get(newId);
+
+            // Assert - Expects exception
+        }
+
     }
 }
