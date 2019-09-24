@@ -10,12 +10,13 @@ namespace Interview.Test
     {
         private IRepository<IStoreable<object>, object> repository;
         private List<IStoreable<object>> storeables;
-        public readonly int ID = 1;
+        public readonly int intID1 = 1;
+        public readonly int intID2 = 2;
 
         [TestInitialize]
         public void Setup()
         {
-            storeables = new List<IStoreable<object>>() { new Storeable<object> (ID) };
+            storeables = new List<IStoreable<object>>() { new Storeable<object> (intID1), new Storeable<object>(intID2) };
             repository = new Repository<IStoreable<object>>(storeables);
 
         }
@@ -43,11 +44,11 @@ namespace Interview.Test
             //Arrange
 
             //Act
-            var result = repository.Get(ID);
+            var result = repository.Get(intID1);
 
             //Assert 
             Assert.IsNotNull(result);
-            Assert.AreEqual(result.Id, ID);
+            Assert.AreEqual(result.Id, intID1);
         }
 
         [TestMethod]
@@ -55,7 +56,7 @@ namespace Interview.Test
         public void GivenRepository_WhenReqeustToAddItem_ShouldSaveRecordInRepository()
         {
             //Arrange 
-            int intId = 2;
+            int intId = 3;
             var newRecordInTypeId= new Storeable<object>(intId);
    
             //Act 
@@ -75,11 +76,11 @@ namespace Interview.Test
             //Arrange 
 
             //Act
-            repository.Delete(ID);
-            IStoreable<Object> result = repository.Get(ID);
+            repository.Delete(intID1);
+            IEnumerable<IStoreable<Object>> result = repository.GetAll();
 
             //Assert
-            Assert.IsNull(result);
+            Assert.IsFalse(result.Any(s=>s.Id.Equals(intID1)));
         }
 
         [TestMethod]
@@ -103,10 +104,10 @@ namespace Interview.Test
         public void GivenRepository_WhenRequesForRecordByNonExisitngId_ShouldRaiseArgumentOutOfRangeException()
         {
             // Arrange
-            int? newId = null;
+            Guid newGuid = Guid.NewGuid();
 
             // Act 
-            var result = repository.Get(newId);
+            var result = repository.Get(newGuid);
 
             // Assert - Expects exception
         }
@@ -114,37 +115,36 @@ namespace Interview.Test
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         [TestCategory("Exception")]
-        public void GivenRepository_WhenRequestToAddExistingItem_ShouldRaiseArgumentOutOfRangeException()
+        public void GivenRepository_WhenRequestToAddItemWithExistingId_ShouldRaiseArgumentException()
         {
             // Arrange
-            int? newId = null;
-            var newRecordInTypeId = new Storeable<object>(newId);
+            var newRecord= new Storeable<object>(intID2);
 
             // Act 
-            repository.Save(newRecordInTypeId);
+            repository.Save(newRecord);
 
             // Assert - Expects exception
         }
 
         [TestMethod]
         [TestCategory("Exception")]
-        [ExpectedException(typeof(NullReferenceException))]
-        public void GivenRepository_WhenRequestToRemoveNonExistingItem_ShouldRaiseNullReferenceException()
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GivenRepository_WhenRequestToRemoveItemWithNullId_ShouldRaiseArgumentNullExceptionException()
         {
             //Arrange 
-            Guid newGuid = Guid.NewGuid();
+            int? newId = null;
 
             //Act
-            repository.Delete(newGuid);
+            repository.Delete(newId);
 
             // Assert - Expects exception
 
         }
 
         [TestMethod]
-        [ExpectedException(typeof(NullReferenceException))]
+        [ExpectedException(typeof(ArgumentNullException))]
         [TestCategory("Exception")]
-        public void GivenRepository_WhenRequestToAddNullItem_ShouldRaiseArgumentOutODRangeException()
+        public void GivenRepository_WhenRequestToAddItemWWithNullId_ShouldRaiseArgumentNullException()
         {
             // Arrange
             int? newId = null;
@@ -156,9 +156,9 @@ namespace Interview.Test
             // Assert - Expects exception
         }
         [TestMethod]
-        [ExpectedException(typeof(NullReferenceException))]
+        [ExpectedException(typeof(ArgumentNullException))]
         [TestCategory("Exception")]
-        public void GivenRepository_WhenRequesForRecordByNullId_ShouldRaiseNullRefernceException()
+        public void GivenRepository_WhenRequesForRecordByNullId_ShouldRaiseArgumentNullException()
         {
             // Arrange
             int? newId = null;

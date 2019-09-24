@@ -23,16 +23,28 @@ namespace Interview
 
         public void Delete(object id)
         {
-            entities.RemoveAll(e=>e.Id.Equals(id));
+            if (id == null) throw new ArgumentNullException(string.Format("Id {0} must not be null", id));
+            if (!entities.Exists(s => s.Id.Equals(id))) throw new ArgumentException(string.Format("Id {0} does not exist", id));
+
+
+            entities.RemoveAll(e => e.Id.Equals(id));
+        
         }
 
         public T Get(object id)
         {
-            return entities.Find(e=>e.Id.Equals(id));
+            if (id == null) throw new ArgumentNullException(string.Format("Id {0} must not be null", id));
+            if(!entities.Exists(s=>s.Id.Equals(id))) throw new ArgumentException(string.Format("Id {0} does not exist", id));
+
+
+            return entities.Find(e => e.Id.Equals(id));
+            
         }
 
         public void Save(T item)
         {
+            if (item.Id == null) throw new ArgumentNullException(string.Format("Id {0} must not be null", item.Id));
+            if (entities.Exists(s => s.Id.Equals(item.Id))) throw new ArgumentException(string.Format("Id {0} already exist", item.Id));
             entities.Add(item);
         }
 
